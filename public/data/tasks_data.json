@@ -1,0 +1,116 @@
+[
+    {
+        "name":"Backlog",
+        "tasks":[
+            {
+                "id":1,
+                "name":"Add discount code to checkout page",
+                "date":"Sep 14",
+                "urgency":2
+            },
+            {
+                "id":2,
+                "name":"Provide documentation on integrations",
+                "date":"Sep 12"
+            },
+            {
+                "id":3,
+                "name":"Design shopping cart dropdown",
+                "date":"Sep 9",
+                "urgency":3
+            },
+            {
+                "id":4,
+                "name":"Add discount code to checkout page",
+                "date":"Sep 14",
+                "urgency":2
+            },
+            {
+                "id":5,
+                "name":"Test checkout flow",
+                "date":"Sep 15",
+                "urgency":3
+            }
+        ]
+    },
+    {
+        "name":"In Progress",
+        "tasks":[
+            {
+                "id":6,
+                "name":"Design shopping cart dropdown",
+                "date":"Sep 9",
+                "urgency":3
+            },
+            {
+                "id":7,
+                "name":"Add discount code to checkout page",
+                "date":"Sep 14",
+                "urgency":2
+            },
+            {
+                "id":8,
+                "name":"Provide documentation on integrations",
+                "date":"Sep 12",
+                "urgency":4
+            }
+        ]
+    },
+    {
+        "name":"Review",
+        "tasks":[
+            {
+                "id":9,
+                "name":"Provide documentation on integrations",
+                "date":"Sep 12"
+            },
+            {
+                "id":10,
+                "name":"Design shopping cart dropdown",
+                "date":"Sep 9",
+                "urgency":2
+            },
+            {
+                "id":11,
+                "name":"Add discount code to checkout page",
+                "date":"Sep 14",
+                "urgency":3
+            },
+            {
+                "id":12,
+                "name":"Design shopping cart dropdown",
+                "date":"Sep 9",
+                "urgency":2
+            },
+            {
+                "id":13,
+                "name":"Add discount code to checkout page",
+                "date":"Sep 14",
+                "urgency":3
+            }
+        ]
+    },
+    {
+        "name":"Done",
+        "tasks":[
+            {
+                "id":14,
+                "name":"Add discount code to checkout page",
+                "date":"Sep 14",
+                "urgency":2
+            },
+            {
+                "id":15,
+                "name":"Design shopping cart dropdown",
+                "date":"Sep 9",
+                "urgency":3
+            },
+            {
+                "id":16,
+                "name":"Add discount code to checkout page",
+                "date":"Sep 14",
+                "urgency":2
+            }
+        ]
+    }
+]
