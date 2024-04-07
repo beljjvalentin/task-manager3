@@ -1,11 +1,11 @@
 <template>
-    <div class="bg-white shadow rounded px-3 pt-3 pb-5 border border-white">
+    <div class="bg-white shadow rounded px-3 pt-3 pb-5 border border-white" :data-id="task.id">
         <div class="flex justify-between">
             <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">{{task.title}}</p>
 
             <img
                 class="w-6 h-6 rounded-full ml-3"
-                src="https://pickaface.net/gallery/avatar/unr_sample_161118_2054_ynlrg.png"
+                src="../../../public/task.png"
                 alt="Avatar"
             >
         </div>
@@ -38,6 +38,8 @@ export default {
             };
             return mappings[this.task.type] || mappings.default;
         }
+    },
+    mounted() {
     }
 };
 </script>
