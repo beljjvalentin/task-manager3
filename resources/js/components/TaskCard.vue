@@ -12,7 +12,7 @@
         </div>
         <div class="flex mt-4 justify-between items-center">
             <span class="text-sm text-gray-600">{{task.date}}</span>
-            <badge v-if="task.urgency" :color="badgeColor">{{task.urgency}}</badge>
+            <Badge :color="badgeColor" :text="task.urgency.toString()"></Badge>
         </div>
     </div>
 </template>
@@ -24,20 +24,20 @@ export default {
     },
     props: {
         task: {
-            type: Object,
+            urgency: Object,
             default: () => ({})
         }
     },
     computed: {
         badgeColor() {
             const mappings = {
-                Design: "purple",
-                "Feature Request": "teal",
-                Backend: "blue",
-                QA: "green",
-                default: "teal"
+                1: "bg-red-500",
+                2: "bg-amber-500",
+                3: "bg-lime-500",
+                4: "bg-teal-500",
+                default: "urgent"
             };
-            return mappings[this.task.type] || mappings.default;
+            return mappings[this.task.urgency] || mappings.default;
         }
     },
     methods:{

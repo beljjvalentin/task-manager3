@@ -1,20 +1,17 @@
 <template>
-    <div
-        class="px-3 h-6 rounded-full text-xs font-semibold flex items-center"
-        :class="`bg-${color}-100 text-${color}-700`"
-    >
-        <span class="w-2 h-2 rounded-full mr-1" :class="`bg-${color}-400`"></span>
-        <span>
-      <slot></slot>
-    </span>
-    </div>
+    <span :class="`inline-block whitespace-nowrap rounded-full justify-center px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none ${color}`"
+    >{{text}}</span>
 </template>
 <script>
 export default {
     props: {
         color: {
             type: String,
-            default: "teal"
+            default: "success"
+        },
+        text: {
+            type: String,
+            default: ""
         }
     }
 };
