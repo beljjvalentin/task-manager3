@@ -5,14 +5,14 @@
             <div class="min-h-screen flex overflow-x-scroll py-12">
                 <div
                     v-for="column in columns"
-                    :key="column.title"
+                    :key="column.name"
                     class="bg-gray-100 rounded-lg px-3 py-3 column-width rounded mr-4"
                 >
                     <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">
-                        {{column.title}}
-                        <button class="btn float-right">Add task</button>
+                        {{column.name}}
+                        <button class="btn float-right" @click="addTask">Add task</button>
                     </p>
-                    <VueDraggableNext :list="column.tasks" :animation="200" ghost-class="ghost-card" group="tasks" :move="checkMove">
+                    <VueDraggableNext :list="column.tasks" :animation="200" ghost-class="ghost-card" group="tasks" @end="onEnd">
                         <!-- Each element from here will be draggable and animated. Note :key is very important here to be unique both for draggable and animations to be smooth & consistent. -->
                         <task-card
                             v-for="(task) in column.tasks"
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-//import draggable from "vuedraggable";
 import { VueDraggableNext } from "vue-draggable-next";
 import TaskCard from "./components/TaskCard.vue";
 import apiClient from 'axios';
@@ -40,8 +39,18 @@ export default {
         VueDraggableNext
     },
     methods:{
-        checkMove: function(evt){
-            console.log(evt.draggedContext.element.id);
+        onEnd: function (evt){
+            this.columns.forEach(col => {
+                col.tasks.forEach(task => {
+                    if(task.id === evt.target.__draggable_component__.context.element.id){
+                        console.log(task)
+                    }
+                })
+            })
+            console.log()
+        },
+        addTask: function(){
+            console.log(this.columns)
         },
         saveData: function(){
 
@@ -56,8 +65,13 @@ export default {
     },
     mounted() {
         apiClient
-            .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-            .then(response => (this.columns = response))
+            .get('/api/tasks')
+            .then(response => {
+                this.columns = response.data;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
     }
 };
 </script>
