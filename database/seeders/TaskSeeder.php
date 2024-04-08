@@ -7,6 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use File;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class TaskSeeder extends Seeder
 {
@@ -19,6 +20,7 @@ class TaskSeeder extends Seeder
         $json = File::get(public_path("data/tasks_data.json"));
         $data = json_decode($json, true);
 
+        $progressBar = new ProgressBar($this->command->getOutput(), count($data));
         foreach ($data as $category) {
             $categoryId = DB::table('task_categories')->insertGetId([
                 'name' => $category['name'],
@@ -36,6 +38,8 @@ class TaskSeeder extends Seeder
                     'updated_at' => Carbon::now(),
                 ]);
             }
+            $progressBar->advance();
         }
+        $progressBar->finish();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Task extends Model
 {
@@ -20,12 +21,12 @@ class Task extends Model
         'urgency',
     ];
 
-    public function TaskCategory(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function TaskCategory(): HasOne
     {
         return $this->hasOne(TaskCategory::class,'task_categories','id');
     }
 
-    public function User(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function User(): HasOne
     {
         return $this->hasOne(User::class,'user_id','id');
     }
