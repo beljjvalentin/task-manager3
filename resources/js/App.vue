@@ -8,9 +8,9 @@
                     :key="column.name"
                     class="bg-gray-100 rounded-lg px-3 py-3 column-width rounded mr-4"
                 >
-                    <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">
+                    <p class="text-gray-700 font-bold font-sans tracking-wide text-base leading-loose">
                         {{column.name}}
-                        <button class="btn float-right" @click="addTask">Add task</button>
+                        <v-btn variant="elevated" class="float-right h-1" @click="addTask">Add task</v-btn>
                     </p>
                     <VueDraggableNext :list="column.tasks" :animation="200" ghost-class="ghost-card" group="tasks" @end="onEnd">
                         <!-- Each element from here will be draggable and animated. Note :key is very important here to be unique both for draggable and animations to be smooth & consistent. -->
@@ -25,6 +25,7 @@
                 </div>
             </div>
         </div>
+        <Dialog></Dialog>
     </div>
 </template>
 
@@ -32,9 +33,13 @@
 import { VueDraggableNext } from "vue-draggable-next";
 import TaskCard from "./components/TaskCard.vue";
 import apiClient from 'axios';
+import Dialog from "./components/Dialog.vue";
+import {VBtn} from "vuetify/components";
 export default {
     name: "App",
     components: {
+        VBtn,
+        Dialog,
         TaskCard,
         VueDraggableNext
     },

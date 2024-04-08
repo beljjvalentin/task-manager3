@@ -2,6 +2,9 @@ import {createApp} from 'vue'
 
 import App from './App.vue'
 
+import 'vuetify/dist/vuetify.min.css';
+import { createVuetify } from 'vuetify';
+
 import '/resources/css/app.css'
 
 import axios from 'axios';
@@ -14,4 +17,12 @@ const apiClient = axios.create({
     },
 });
 
-createApp(App).mount("#app")
+const vuetify = createVuetify({
+    // Add your Vuetify configuration here
+});
+
+const app = createApp(App);
+app.use(vuetify);
+app.mount("#app")
+
+
