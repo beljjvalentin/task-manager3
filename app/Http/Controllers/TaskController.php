@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 
+use App\Models\TaskCategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -17,8 +18,26 @@ class TaskController extends Controller
      */
     public function index(): JsonResponse
     {
+        // Fetch all task categories
+        $categories = TaskCategory::all();
+
+        // Fetch all tasks
         $tasks = Task::all();
-        return response()->json($tasks, 200);
+
+        // Initialize an empty array to store the grouped tasks
+        $groupedTasks = [];
+
+        // Populate the groupedTasks array with task categories and associated tasks
+        foreach ($categories as $category) {
+            $task_list = Task::where('category_id', $category->id)->get();
+            $groupedTasks[] = [
+                'name' => $category->name,
+                'tasks' => $task_list
+            ];
+        }
+
+        // Return the grouped tasks as a JSON response
+        return response()->json($groupedTasks, 200);
     }
 
     /**

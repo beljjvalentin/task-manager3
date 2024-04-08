@@ -41,5 +41,6 @@ class TaskSeeder extends Seeder
             $progressBar->advance();
         }
         $progressBar->finish();
+        echo "\n";
     }
 }
