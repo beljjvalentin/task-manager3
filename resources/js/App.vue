@@ -19,13 +19,14 @@
                             :key="task.id"
                             :task="task"
                             class="mt-3 cursor-move"
+                            @edit-event="editTask"
                         ></task-card>
                         <!-- </transition-group> -->
                     </VueDraggableNext>
                 </div>
             </div>
         </div>
-        <Dialog></Dialog>
+        <Dialog ref="taskForm" @save-event="saveTask"></Dialog>
     </div>
 </template>
 
@@ -43,29 +44,62 @@ export default {
         TaskCard,
         VueDraggableNext
     },
-    methods:{
-        onEnd: function (evt){
+    methods: {
+        onEnd: function (evt) {
             this.columns.forEach(col => {
                 col.tasks.forEach(task => {
-                    if(task.id === evt.target.__draggable_component__.context.element.id){
+                    if (task.id === evt.target.__draggable_component__.context.element.id) {
                         console.log(task)
                     }
                 })
             })
-            console.log()
         },
-        addTask: function(){
-            console.log(this.columns)
+        addTask: function () {
+            this.selectedTaskId = 0;
+            this.$refs.taskForm.open(null);
         },
-        saveData: function(){
+        editTask: function (id) {
+            this.selectedTaskId = id;
+            this.columns.forEach(col => {
+                col.tasks.forEach(task => {
+                    if(this.selectedTaskId === task.id){
+                        this.$refs.taskForm.open(task);
+                    }
+                })
+            });
+        },
+        saveTask: function (id, name, date, urgency) {
+
+                if(id === 0){
+                    console.log(this.columns[0].tasks)
+                    console.log(urgency)
+                    this.columns[0].tasks.push({
+                        "id": 100,
+                        "name": name,
+                        "date": date,
+                        "urgency": urgency
+                    });
+                } else {
+                    this.columns.forEach(col => {
+                        col.tasks.forEach(task => {
+                            if(this.selectedTaskId === task.id){
+                                task.id = id;
+                                task.name = name;
+                                task.date = date;
+                                task.urgency = urgency;
+
+                            }
+                        })
+                    });
+                }
+
 
         }
     },
     data() {
         return {
-            columns: [
-
-            ]
+            selectedTaskId: 0,
+            columns: []
         };
     },
     mounted() {
@@ -77,7 +111,12 @@ export default {
             .catch(error => {
                 console.error('Error fetching data:', error);
             });
+    },
+    watchers:{
+    },
+    computed: {
     }
+
 };
 </script>
 

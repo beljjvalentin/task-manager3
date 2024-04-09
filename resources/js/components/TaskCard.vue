@@ -22,6 +22,7 @@ export default {
     components: {
         Badge
     },
+    emits: ['edit-event'],
     props: {
         task: {
             urgency: Object,
@@ -42,8 +43,7 @@ export default {
     },
     methods:{
         editTask: function() {
-            console.log("Editing task #" + this.task.id)
-
+            this.$emit('edit-event', this.task.id);
         }
     },
     mounted() {
