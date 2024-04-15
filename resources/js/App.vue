@@ -6,7 +6,7 @@
                 <div
                     v-for="column in columns"
                     :key="column.name"
-                    class="bg-gray-100 rounded-lg px-3 py-3 column-width rounded mr-4"
+                    class="bg-gray-100 rounded-lg px-3 py-3 column-width mr-4"
                 >
                     <p class="text-gray-700 font-bold font-sans tracking-wide text-base leading-loose">
                         {{column.name}}
@@ -26,16 +26,16 @@
                 </div>
             </div>
         </div>
-        <Dialog ref="taskForm" @save-event="saveTask"></Dialog>
+        <Dialog ref="taskForm" @save-event="saveTask" @remove-event="removeTask"></Dialog>
     </div>
 </template>
 
 <script>
 import { VueDraggableNext } from "vue-draggable-next";
 import TaskCard from "./components/TaskCard.vue";
-import apiClient from 'axios';
 import Dialog from "./components/Dialog.vue";
 import {VBtn} from "vuetify/components";
+import axios from 'axios';
 export default {
     name: "App",
     components: {
@@ -69,31 +69,71 @@ export default {
             });
         },
         saveTask: function (id, name, date, urgency) {
+            if(id === 0){
+                const jsonData = {
+                    name: name,
+                    date: date,
+                    category_id: 2,
+                    user_id: 1,
+                    urgency: urgency,
+                };
 
-                if(id === 0){
-                    console.log(this.columns[0].tasks)
-                    console.log(urgency)
-                    this.columns[0].tasks.push({
-                        "id": 100,
-                        "name": name,
-                        "date": date,
-                        "urgency": urgency
+                axios
+                    .post('/api/tasks', jsonData)
+                    .then(response => {
+                        this.columns[0].tasks.push({
+                            "id": response.data.task.id,
+                            "name": name,
+                            "date": date,
+                            "urgency": urgency
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error sending data:', error);
                     });
-                } else {
-                    this.columns.forEach(col => {
-                        col.tasks.forEach(task => {
-                            if(this.selectedTaskId === task.id){
-                                task.id = id;
-                                task.name = name;
-                                task.date = date;
-                                task.urgency = urgency;
 
+            } else {
+                const jsonData = {
+                    name: name,
+                    date: date,
+                    category_id: 2,
+                    user_id: 1,
+                    urgency: urgency,
+                };
+
+                axios.put(`/api/tasks/${this.selectedTaskId}/`, jsonData)
+                    .then(response => {
+                        this.columns.forEach(col => {
+                            col.tasks.forEach(task => {
+                                if(this.selectedTaskId === task.id){
+                                    task.id = id;
+                                    task.name = name;
+                                    task.date = date;
+                                    task.urgency = urgency;
+                                }
+                            })
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error sending data:', error);
+                    });
+            }
+
+        },
+        removeTask: function (id) {
+            axios.delete(`/api/tasks/${this.selectedTaskId}/`)
+                .then(response => {
+                    this.columns.forEach(col => {
+                        col.tasks.forEach((task, index) => {
+                            if(this.selectedTaskId === task.id){
+                                col.tasks.splice(index, 1);
                             }
                         })
                     });
-                }
-
-
+                })
+                .catch(error => {
+                    console.error('Error sending data:', error);
+                });
         }
     },
     data() {
@@ -103,7 +143,7 @@ export default {
         };
     },
     mounted() {
-        apiClient
+        axios
             .get('/api/tasks')
             .then(response => {
                 this.columns = response.data;

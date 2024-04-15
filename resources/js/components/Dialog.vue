@@ -23,7 +23,7 @@
                         <v-col
                             cols="12"
                             md="12"
-                            sm="6"
+                            sm="12"
                         >
                             <v-text-field
                                 label="Task description*"
@@ -34,7 +34,7 @@
 
                         <v-col
                             cols="12"
-                            md="8"
+                            md="6"
                             sm="6"
                         >
                             <v-text-field
@@ -47,13 +47,14 @@
 
                         <v-col
                             cols="12"
-                            md="4"
+                            md="6"
                             sm="6"
                         >
                             <v-select
                                 :items="urgencyList"
-                                v-model="urgencyList[urgencyIndex - 1]"
-                                label="Priority"
+                                v-model="urgency"
+                                label="Urgency"
+                                variant="outlined"
                                 required
                             ></v-select>
                         </v-col>
@@ -66,6 +67,13 @@
                 <v-divider></v-divider>
 
                 <v-card-actions>
+                    <v-btn
+                        text="Remove"
+                        color="red"
+                        variant="tonal"
+                        class="float-start"
+                        @click="removeAndClose"
+                    ></v-btn>
                     <v-spacer></v-spacer>
 
                     <v-btn
@@ -124,7 +132,7 @@ export default {
         VMenu,
         VDatePicker
     },
-    emits: ['save-event'],
+    emits: ['save-event', 'remove-event'],
     props: {
         id: {
             type: Number,
@@ -139,6 +147,14 @@ export default {
         }
     },
     computed:{
+        urgencyIndex(){
+            for(let i=0; i<this.urgencyList.length; i++){
+                if(this.urgency === this.urgencyList[i]){
+                    return i+1;
+                }
+            }
+            return 0
+        }
     },
     watch: {
         dialog: function(newVal, oldVal) { // watch it
@@ -149,23 +165,33 @@ export default {
         open(task){
             this.taskId = 0;
             this.taskName = "";
-            this.urgencyIndex = 1;
+            this.urgency = "1. Urgent";
             this.selectedDate = moment(new Date()).format('yyyy-MM-DD');
             if(task){
                 this.taskId = task.id;
                 this.taskName = task.name;
                 this.selectedDate = task.date;
-                // urgencyList.forEach(el => {
-                //     el.id ==
-                // });
-                this.urgencyIndex = task.urgency;
-
+                let selectedId = 0;
+                let selectedName = "";
+                this.urgencyList.forEach(function (el, idx) {
+                    if(idx === (task.urgency - 1)){
+                        selectedName = el;
+                        selectedId = idx;
+                    }
+                });
+                this.urgency = selectedName;
             }
             this.dialog = true;
         },
         saveAndClose(){
-            this.dialog = false
+            this.dialog = false;
             this.$emit('save-event', this.taskId, this.taskName, this.selectedDate, this.urgencyIndex)
+        },
+        removeAndClose(){
+            if (window.confirm("Are you sure you want to remove this record?")) {
+                this.dialog = false;
+                this.$emit('remove-event', this.taskId)
+            }
         }
     },
     data(){
@@ -175,7 +201,7 @@ export default {
             taskName: "",
             urgencyList: ['1. Urgent', '2. Finish soon', '3. Regular tasks', '4. Low priority'],
             urgencySelected: "",
-            urgencyIndex: 1,
+            urgency: "",
             dialog: false,
         }
     }

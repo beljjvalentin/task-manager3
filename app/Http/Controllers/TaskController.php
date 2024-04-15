@@ -30,6 +30,12 @@ class TaskController extends Controller
         // Populate the groupedTasks array with task categories and associated tasks
         foreach ($categories as $category) {
             $task_list = Task::where('category_id', $category->id)->get();
+
+            // Add category name inside each task
+//            foreach ($task_list as $task) {
+//                $task->category_name = $category->name;
+//            }
+
             $groupedTasks[] = [
                 'name' => $category->name,
                 'tasks' => $task_list
@@ -49,7 +55,7 @@ class TaskController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'date' => 'date_format:Y-m-d',
             'category_id' => 'exists:task_categories,id',
             'urgency' => 'integer|between:1,100',
@@ -86,7 +92,7 @@ class TaskController extends Controller
     public function update(Request $request, Task $task): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'date' => 'date_format:Y-m-d',
             'category_id' => 'exists:task_categories,id',
             'urgency' => 'integer|between:1,100',
