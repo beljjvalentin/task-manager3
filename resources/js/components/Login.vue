@@ -34,6 +34,7 @@
 
 <script>
 import {VBtn, VCard, VCardText, VCardTitle, VDialog, VForm, VTextField} from "vuetify/components";
+import axios from "axios";
 
 export default {
     name: "Login",
@@ -57,11 +58,20 @@ export default {
     },
     methods: {
         login() {
-            // Here you can handle the login logic
-            console.log('Logging in with:', this.loginForm);
+            const jsonData = {
+                email: this.loginForm.login,
+                password: this.loginForm.password
+            };
 
-            // Close the dialog after login attempt
-            this.dialog = false;
+            axios
+                .post('/api/authenticate', jsonData)
+                .then(response => {
+                    this.$emit('authenticated', response.data.user_id);
+                    this.dialog = false;
+                })
+                .catch(error => {
+                    console.error('Error sending data:', error);
+                });
         },
     },
 };

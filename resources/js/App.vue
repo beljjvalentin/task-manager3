@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <Login ref="loginForm" ></Login>
+        <Login ref="loginForm" @authenticated="handleAuthentication"></Login>
         <Dialog ref="taskForm" @save-event="saveTask" @remove-event="removeTask"></Dialog>
     </div>
 </template>
@@ -142,7 +142,7 @@ export default {
             }
 
         },
-        removeTask: function (id) {
+        removeTask: function () {
             axios.delete(`/api/tasks/${this.selectedTaskId}/`)
                 .then(response => {
                     this.columns.forEach(col => {
@@ -156,12 +156,17 @@ export default {
                 .catch(error => {
                     console.error('Error sending data:', error);
                 });
-        }
+        },
+        handleAuthentication(userId) {
+            // Handle the authenticated event and set the userId
+            this.userId = userId;
+        },
     },
     data() {
         return {
             selectedTaskId: 0,
-            columns: []
+            columns: [],
+            userId: 0
         };
     },
     mounted() {
