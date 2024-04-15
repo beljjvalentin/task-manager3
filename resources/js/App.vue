@@ -26,6 +26,7 @@
                 </div>
             </div>
         </div>
+        <Login ref="loginForm" ></Login>
         <Dialog ref="taskForm" @save-event="saveTask" @remove-event="removeTask"></Dialog>
     </div>
 </template>
@@ -36,11 +37,13 @@ import TaskCard from "./components/TaskCard.vue";
 import Dialog from "./components/Dialog.vue";
 import {VBtn} from "vuetify/components";
 import axios from 'axios';
+import Login from "./components/Login.vue";
 export default {
     name: "App",
     components: {
         VBtn,
         Dialog,
+        Login,
         TaskCard,
         VueDraggableNext
     },
