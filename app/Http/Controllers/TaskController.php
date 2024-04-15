@@ -19,7 +19,7 @@ class TaskController extends Controller
     public function index(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'user_id' => 'exists:users,id'
+            'user_id' => 'required'
         ]);
 
         if ($validator->fails()) {

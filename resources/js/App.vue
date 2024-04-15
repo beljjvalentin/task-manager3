@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <div class="flex justify-center">
-
+            <v-btn v-show="userId!==0" variant="elevated" class=" h-1" @click="logOut">Log Out</v-btn>
             <div class="min-h-screen flex overflow-x-scroll py-12">
                 <div
                     v-for="column in columns"
@@ -73,7 +73,6 @@ export default {
         },
         addTask: function (col_id, event) {
             this.selectedTaskId = 0;
-            console.log(col_id);
             this.$refs.taskForm.open(null, col_id);
         },
         editTask: function (id) {
@@ -97,7 +96,7 @@ export default {
                 };
 
                 axios
-                    .post('/api/tasks', jsonData)
+                    .post('/api/task', jsonData)
                     .then(response => {
                         this.columns.forEach(col => {
                             if(col.id === category){
@@ -157,10 +156,26 @@ export default {
                     console.error('Error sending data:', error);
                 });
         },
-        handleAuthentication(userId) {
-            // Handle the authenticated event and set the userId
+        handleAuthentication: function(userId) {
             this.userId = userId;
+            const jsonData = {
+                user_id: userId
+            };
+
+            axios
+                .post('/api/tasks', jsonData)
+                .then(response => {
+                    this.columns = response.data;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
         },
+        logOut: function (){
+            this.columns = [];
+            this.userId = 0;
+            this.$refs.loginForm.open();
+        }
     },
     data() {
         return {
@@ -170,18 +185,6 @@ export default {
         };
     },
     mounted() {
-        const jsonData = {
-            user_id: this.userId
-        };
-
-        axios
-            .post('/api/tasks', jsonData)
-            .then(response => {
-                this.columns = response.data;
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
     },
     watchers:{
     },

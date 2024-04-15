@@ -57,6 +57,9 @@ export default {
         };
     },
     methods: {
+        open() {
+            this.dialog = true;
+        },
         login() {
             const jsonData = {
                 email: this.loginForm.login,
