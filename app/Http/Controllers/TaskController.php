@@ -16,8 +16,16 @@ class TaskController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'exists:users,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
         // Fetch all task categories
         $categories = TaskCategory::all();
 
@@ -29,12 +37,7 @@ class TaskController extends Controller
 
         // Populate the groupedTasks array with task categories and associated tasks
         foreach ($categories as $category) {
-            $task_list = Task::where('category_id', $category->id)->get();
-
-            // Add category name inside each task
-//            foreach ($task_list as $task) {
-//                $task->category_name = $category->name;
-//            }
+            $task_list = Task::where('category_id', $category->id)->where('user_id', $request->user_id)->get();
 
             $groupedTasks[] = [
                 'id' => $category->id,

@@ -36,7 +36,7 @@ import { VueDraggableNext } from "vue-draggable-next";
 import TaskCard from "./components/TaskCard.vue";
 import Dialog from "./components/Dialog.vue";
 import {VBtn} from "vuetify/components";
-import axios from 'axios';
+import axios from "axios";
 import Login from "./components/Login.vue";
 export default {
     name: "App",
@@ -56,7 +56,7 @@ export default {
                             name: task.name,
                             date: task.date,
                             category_id: col.id,
-                            user_id: 1,
+                            user_id: this.userId,
                             urgency: task.urgency,
                         };
 
@@ -92,7 +92,7 @@ export default {
                     name: name,
                     date: date,
                     category_id: category,
-                    user_id: 1,
+                    user_id: this.userId,
                     urgency: urgency,
                 };
 
@@ -118,8 +118,8 @@ export default {
                 const jsonData = {
                     name: name,
                     date: date,
-                    category_id: 2,
-                    user_id: 1,
+                    category_id: category,
+                    user_id: this.userId,
                     urgency: urgency,
                 };
 
@@ -170,8 +170,12 @@ export default {
         };
     },
     mounted() {
+        const jsonData = {
+            user_id: this.userId
+        };
+
         axios
-            .get('/api/tasks')
+            .post('/api/tasks', jsonData)
             .then(response => {
                 this.columns = response.data;
             })
