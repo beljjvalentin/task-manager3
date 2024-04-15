@@ -10,7 +10,7 @@
                 >
                     <p class="text-gray-700 font-bold font-sans tracking-wide text-base leading-loose">
                         {{column.name}}
-                        <v-btn variant="elevated" class="float-right h-1" @click="addTask">Add task</v-btn>
+                        <v-btn variant="elevated" class="float-right h-1" @click="addTask(column.id, $event)">Add task</v-btn>
                     </p>
                     <VueDraggableNext :list="column.tasks" :animation="200" ghost-class="ghost-card" group="tasks" @end="onEnd">
                         <!-- Each element from here will be draggable and animated. Note :key is very important here to be unique both for draggable and animations to be smooth & consistent. -->
@@ -49,31 +49,46 @@ export default {
             this.columns.forEach(col => {
                 col.tasks.forEach(task => {
                     if (task.id === evt.target.__draggable_component__.context.element.id) {
-                        console.log(task)
+                        const jsonData = {
+                            name: task.name,
+                            date: task.date,
+                            category_id: col.id,
+                            user_id: 1,
+                            urgency: task.urgency,
+                        };
+
+                        axios.put(`/api/tasks/${task.id}/`, jsonData)
+                            .then(response => {
+                                console.log('Task moved successfully');
+                            })
+                            .catch(error => {
+                                console.error('Error sending data:', error);
+                            });
                     }
                 })
             })
         },
-        addTask: function () {
+        addTask: function (col_id, event) {
             this.selectedTaskId = 0;
-            this.$refs.taskForm.open(null);
+            console.log(col_id);
+            this.$refs.taskForm.open(null, col_id);
         },
         editTask: function (id) {
             this.selectedTaskId = id;
             this.columns.forEach(col => {
                 col.tasks.forEach(task => {
                     if(this.selectedTaskId === task.id){
-                        this.$refs.taskForm.open(task);
+                        this.$refs.taskForm.open(task, col.id);
                     }
                 })
             });
         },
-        saveTask: function (id, name, date, urgency) {
+        saveTask: function (id, name, date, urgency, category) {
             if(id === 0){
                 const jsonData = {
                     name: name,
                     date: date,
-                    category_id: 2,
+                    category_id: category,
                     user_id: 1,
                     urgency: urgency,
                 };
@@ -81,12 +96,16 @@ export default {
                 axios
                     .post('/api/tasks', jsonData)
                     .then(response => {
-                        this.columns[0].tasks.push({
-                            "id": response.data.task.id,
-                            "name": name,
-                            "date": date,
-                            "urgency": urgency
-                        });
+                        this.columns.forEach(col => {
+                            if(col.id === category){
+                                col.tasks.push({
+                                    "id": response.data.task.id,
+                                    "name": name,
+                                    "date": date,
+                                    "urgency": urgency
+                                });
+                            }
+                        })
                     })
                     .catch(error => {
                         console.error('Error sending data:', error);

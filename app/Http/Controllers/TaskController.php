@@ -37,6 +37,7 @@ class TaskController extends Controller
 //            }
 
             $groupedTasks[] = [
+                'id' => $category->id,
                 'name' => $category->name,
                 'tasks' => $task_list
             ];

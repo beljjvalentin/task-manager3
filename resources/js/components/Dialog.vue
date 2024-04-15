@@ -162,7 +162,8 @@ export default {
         },
     },
     methods: {
-        open(task){
+        open(task, category_id){
+            this.categoryId = category_id;
             this.taskId = 0;
             this.taskName = "";
             this.urgency = "1. Urgent";
@@ -185,7 +186,7 @@ export default {
         },
         saveAndClose(){
             this.dialog = false;
-            this.$emit('save-event', this.taskId, this.taskName, this.selectedDate, this.urgencyIndex)
+            this.$emit('save-event', this.taskId, this.taskName, this.selectedDate, this.urgencyIndex, this.categoryId)
         },
         removeAndClose(){
             if (window.confirm("Are you sure you want to remove this record?")) {
@@ -196,6 +197,7 @@ export default {
     },
     data(){
         return {
+            categoryId: 2,
             selectedDate: "",
             taskId: 0,
             taskName: "",
