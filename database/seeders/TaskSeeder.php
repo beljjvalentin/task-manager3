@@ -28,12 +28,15 @@ class TaskSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ]);
 
+            $myUserId = DB::table('users')->where('email', '=', 'c0886610@mylambton.ca')->id;
+
             foreach ($category['tasks'] as $task) {
                 DB::table('tasks')->insert([
                     'name' => $task['name'],
                     'date' => Carbon::parse($task['date']),
                     'urgency' => $task['urgency'] ?? 1,
                     'category_id' => $categoryId,
+                    'user_id' => $myUserId,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);
