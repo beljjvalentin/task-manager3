@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/check/', [UserController::class, 'checkToken']);
 Route::post('/authenticate/', [UserController::class, 'index']);
 
 Route::post('/tasks', [TaskController::class, 'index']);

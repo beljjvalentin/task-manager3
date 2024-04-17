@@ -27,9 +27,33 @@ class UserController
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $userId = Auth::id(); // Get authenticated user's ID
-            return response()->json(["result" => "success", "user_id" => $userId], 200);
+            $token = Auth::getUser()->getRememberToken(); // Get authenticated user's token
+            return response()->json(["result" => "success", "user_id" => $userId, "token" => $token], 200);
         } else {
             return response()->json(["result" => "fail"], 200);
         }
+    }
+
+    public function checkToken(Request $request): JsonResponse
+    {
+        // Get the authenticated user
+        $user = Auth::user();
+        $givenToken = $request->input('token');
+
+        // Check if the user is authenticated
+        if ($user) {
+            // Get the remember token
+            $token = $user->getRememberToken();
+
+            // Check if token matches the existing one
+            if($givenToken === $token) {
+                return response()->json(["result" => "success"], 200);
+            } else {
+                return response()->json(["result" => "fail"], 200);
+            }
+        } else {
+            return response()->json(["result" => "fail"], 200);
+        }
+
     }
 }

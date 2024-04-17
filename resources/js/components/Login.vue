@@ -49,7 +49,7 @@ export default {
     },
     data() {
         return {
-            dialog: true, // Open by default
+            dialog: false, // Open by default
             loginForm: {
                 login: 'c0886610@mylambton.ca',
                 password: 'password',
@@ -69,7 +69,7 @@ export default {
             axios
                 .post('/api/authenticate', jsonData)
                 .then(response => {
-                    this.$emit('authenticated', response.data.user_id);
+                    this.$emit('authenticated', response.data.user_id, response.data.token);
                     this.dialog = false;
                 })
                 .catch(error => {

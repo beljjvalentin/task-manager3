@@ -156,7 +156,8 @@ export default {
                     console.error('Error sending data:', error);
                 });
         },
-        handleAuthentication: function(userId) {
+        handleAuthentication: function(userId, authToken) {
+            localStorage.setItem('userId', userId)
             this.userId = userId;
             const jsonData = {
                 user_id: userId
@@ -174,6 +175,7 @@ export default {
         logOut: function (){
             this.columns = [];
             this.userId = 0;
+            localStorage.removeItem('userId')
             this.$refs.loginForm.open();
         }
     },
@@ -185,6 +187,34 @@ export default {
         };
     },
     mounted() {
+        const userId = localStorage.getItem('userId');
+        const authToken = localStorage.getItem('authToken');
+
+        if (!userId) {
+            this.$refs.loginForm.open();
+        }
+         else
+        {
+            this.handleAuthentication(userId, authToken);
+                // const jsonData = {
+                //     token: authToken
+                // };
+                //
+                // axios
+                //     .post('/api/check', jsonData)
+                //     .then(response => {
+                //         if(response.data.result === 'true'){
+                //             console.log()
+                //         } else {
+                //             this.$refs.loginForm.open();
+                //         }
+                //         //this.$emit('authenticated', response.data.user_id, response.data.token);
+                //         //this.dialog = false;
+                //     })
+                //     .catch(error => {
+                //         console.error('Error sending data:', error);
+                //     });
+        }
     },
     watchers:{
     },
@@ -200,12 +230,5 @@ export default {
     min-width: 320px;
     width: 320px;
 }
-/* Unfortunately @apply cannot be setup in codesandbox,
-but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */
-/*.ghost-card {
-    opacity: 0.5;
-    background: #F7FAFC;
-    border: 1px solid #4299e1;
-}*/
 
 </style>

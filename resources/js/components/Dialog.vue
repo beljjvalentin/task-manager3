@@ -4,15 +4,6 @@
             v-model="dialog"
             max-width="600"
         >
-<!--            <template v-slot:activator="{ props: activatorProps }">-->
-<!--                <v-btn-->
-<!--                    class="text-none font-weight-regular"-->
-<!--                    prepend-icon="mdi-account"-->
-<!--                    text="Edit Profile"-->
-<!--                    variant="tonal"-->
-<!--                    v-bind="activatorProps"-->
-<!--                ></v-btn>-->
-<!--            </template>-->
 
             <v-card
                 prepend-icon="mdi-account"
